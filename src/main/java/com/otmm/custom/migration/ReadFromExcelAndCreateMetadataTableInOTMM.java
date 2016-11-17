@@ -88,7 +88,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
             if (row.getRowNum() != 0) {
                 Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
                 if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && cell.getStringCellValue().startsWith("CHEVRON")) {
+                        && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (lookUpTable != null) {
                         lookUpTable.setColumns(lstDatabaseColumn
                                 .toArray(new DatabaseColumn[lstDatabaseColumn.size()]));
@@ -102,7 +102,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
                     continue;
                 }
                 else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && !cell.getStringCellValue().startsWith("CHEVRON")) {
+                        && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }
                 else if (isCustomTable) {
@@ -164,7 +164,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
             if (row.getRowNum() != 0) {
                 Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
                 if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && cell.getStringCellValue().startsWith("CHEVRON")) {
+                        && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (metadataTable != null) {
                         metadataTable.setColumns(lstDatabaseColumn
                                 .toArray(new DatabaseColumn[lstDatabaseColumn.size()]));
@@ -179,7 +179,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
                     continue;
                 }
                 else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && !cell.getStringCellValue().startsWith("CHEVRON")) {
+                        && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }
                 else if (isCustomTable) {
