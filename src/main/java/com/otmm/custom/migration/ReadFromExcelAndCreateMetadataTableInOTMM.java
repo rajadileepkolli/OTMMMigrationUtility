@@ -163,6 +163,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
         for (Row row : sheet) {
             if (row.getRowNum() != 0) {
                 Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                // checking if table name starts with sample so that others wont be created
                 if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
                         && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (metadataTable != null) {
