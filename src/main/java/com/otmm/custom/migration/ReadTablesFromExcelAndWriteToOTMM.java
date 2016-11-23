@@ -1,15 +1,12 @@
 package com.otmm.custom.migration;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -21,11 +18,7 @@ import com.artesia.metadata.admin.services.MetadataAdminServices;
 import com.artesia.security.SecuritySession;
 import com.artesia.security.session.services.AuthenticationServices;
 
-/**
- * @author rajakolli
- *
- */
-public class ReadFromExcelAndCreateMetadataTableInOTMM {
+public class ReadTablesFromExcelAndWriteToOTMM {
 
     private static XSSFSheet sheet;
     private static XSSFSheet lookUpSheet;
@@ -36,7 +29,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
      * @param password
      * @param teamsHome
      */
-    public static void createMetaDataTablesInOTMM(String userName, String password,
+    public static void createTablesInOTMM(String userName, String password,
             String teamsHome) {
         if (System.getenv("TEAMS_HOME") != null) {
             System.setProperty("TEAMS_HOME", System.getenv("TEAMS_HOME"));
@@ -46,34 +39,33 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
         }
         try {
 
-            FileInputStream file = new FileInputStream(
-                    new File("OTMM_ImportExport.xlsx"));
+            FileInputStream file = new FileInputStream(new File("CBP_Tables.xlsx"));
 
             // Create Workbook instance holding reference to .xlsx file
-            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
 
             // Get desired sheet from the workbook
-            sheet = xssfWorkbook.getSheet("OTMM Tables");
+            sheet = workbook.getSheet("OTMM Tables");
 
             createDatabaseTable(sheet, userName, password);
 
             System.out.println("Created table in otmm");
 
-            lookUpSheet = xssfWorkbook.getSheet("OTMM LookUpTables");
+            lookUpSheet = workbook.getSheet("OTMM LookUpTables");
 
             createLookUpTable(lookUpSheet, userName, password);
             System.out.println("Created lookUp in otmm");
-            xssfWorkbook.close();
+            workbook.close();
             file.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     /**
      * Create Lookuptables in OTMM
-     * 
      * @param lookUpSheet
      * @param userName
      * @param password
@@ -81,14 +73,14 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
     private static void createLookUpTable(XSSFSheet lookUpSheet, String userName,
             String password) {
         LookupTable lookUpTable = null;
-        List<LookupTable> otmmTables = new ArrayList<>();
+        List<LookupTable> otmmTables = new ArrayList<LookupTable>();
         List<DatabaseColumn> lstDatabaseColumn = new ArrayList<>();
         boolean isCustomTable = false;
         for (Row row : lookUpSheet) {
             if (row.getRowNum() != 0) {
-                Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
-                if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && cell.getStringCellValue().startsWith("CHEVRON")) {
+                Cell cell = row.getCell(0, Row.RETURN_NULL_AND_BLANK);
+                if (null != cell && cell.getCellType() != 3
+                        && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (lookUpTable != null) {
                         lookUpTable.setColumns(lstDatabaseColumn
                                 .toArray(new DatabaseColumn[lstDatabaseColumn.size()]));
@@ -101,8 +93,8 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
                     isCustomTable = true;
                     continue;
                 }
-                else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && !cell.getStringCellValue().startsWith("CHEVRON")) {
+                else if (null != cell && cell.getCellType() != 3
+                        && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }
                 else if (isCustomTable) {
@@ -150,6 +142,7 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
     }
 
     /**
+     * Creates metadata tables in OTMM after reading from ExcelSheet
      * @param sheet
      * @param userName
      * @param password
@@ -162,9 +155,9 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
         boolean isCustomTable = false;
         for (Row row : sheet) {
             if (row.getRowNum() != 0) {
-                Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
-                if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && cell.getStringCellValue().startsWith("CHEVRON")) {
+                Cell cell = row.getCell(0, Row.RETURN_NULL_AND_BLANK);
+                if (null != cell && cell.getCellType() != 3
+                        && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (metadataTable != null) {
                         metadataTable.setColumns(lstDatabaseColumn
                                 .toArray(new DatabaseColumn[lstDatabaseColumn.size()]));
@@ -178,8 +171,8 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
                     isCustomTable = true;
                     continue;
                 }
-                else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
-                        && !cell.getStringCellValue().startsWith("CHEVRON")) {
+                else if (null != cell && cell.getCellType() != 3
+                        && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }
                 else if (isCustomTable) {
@@ -224,4 +217,5 @@ public class ReadFromExcelAndCreateMetadataTableInOTMM {
             }
         }
     }
+
 }
