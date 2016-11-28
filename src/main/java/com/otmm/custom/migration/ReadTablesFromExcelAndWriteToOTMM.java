@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -78,8 +80,8 @@ public class ReadTablesFromExcelAndWriteToOTMM {
         boolean isCustomTable = false;
         for (Row row : lookUpSheet) {
             if (row.getRowNum() != 0) {
-                Cell cell = row.getCell(0, Row.RETURN_NULL_AND_BLANK);
-                if (null != cell && cell.getCellType() != 3
+                Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
                         && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (lookUpTable != null) {
                         lookUpTable.setColumns(lstDatabaseColumn
@@ -93,7 +95,7 @@ public class ReadTablesFromExcelAndWriteToOTMM {
                     isCustomTable = true;
                     continue;
                 }
-                else if (null != cell && cell.getCellType() != 3
+                else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
                         && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }
@@ -155,8 +157,8 @@ public class ReadTablesFromExcelAndWriteToOTMM {
         boolean isCustomTable = false;
         for (Row row : sheet) {
             if (row.getRowNum() != 0) {
-                Cell cell = row.getCell(0, Row.RETURN_NULL_AND_BLANK);
-                if (null != cell && cell.getCellType() != 3
+                Cell cell = row.getCell(0, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
                         && cell.getStringCellValue().startsWith("SAMPLE")) {
                     if (metadataTable != null) {
                         metadataTable.setColumns(lstDatabaseColumn
@@ -171,7 +173,7 @@ public class ReadTablesFromExcelAndWriteToOTMM {
                     isCustomTable = true;
                     continue;
                 }
-                else if (null != cell && cell.getCellType() != 3
+                else if (null != cell && cell.getCellTypeEnum() != CellType.BLANK
                         && !cell.getStringCellValue().startsWith("SAMPLE")) {
                     isCustomTable = false;
                 }

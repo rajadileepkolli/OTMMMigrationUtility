@@ -76,7 +76,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.otmm.custom.migration.Selection</mainClass>
+							<mainClass>com.otmm.custom.migration.MigrationSelection</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

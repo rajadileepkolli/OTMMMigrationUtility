@@ -19,7 +19,8 @@ import com.artesia.metadata.admin.services.MetadataAdminServices;
 import com.artesia.security.SecuritySession;
 import com.artesia.security.session.services.AuthenticationServices;
 
-public class ReadTablesFromOTMMAndWriteToExcel {
+public class ReadTablesFromOTMMAndWriteToExcel
+{
 
     private static XSSFSheet tablesSheet;
     private static int tableRownum = 0;
@@ -27,7 +28,8 @@ public class ReadTablesFromOTMMAndWriteToExcel {
     private static int lookUprownum = 0;
 
     public static void findTablesAndWriteToExcel(String userName, String password,
-            String teamsHome) {
+            String teamsHome)
+    {
 
         // Set TEAMS_HOME value
         if (System.getenv("TEAMS_HOME") != null) {
@@ -92,7 +94,8 @@ public class ReadTablesFromOTMMAndWriteToExcel {
 
     // Retrieves table from the OTMM and attempts to write those values in Excel
     private static void readFromOTAndWriteLookUpTables(String userName, String password)
-            throws BaseTeamsException {
+            throws BaseTeamsException
+    {
         SecuritySession session = null;
         try {
             session = AuthenticationServices.getInstance().login(userName, password);
@@ -115,20 +118,21 @@ public class ReadTablesFromOTMMAndWriteToExcel {
      * @param lookupTable
      * @param cellnum
      */
-    private static void writeInOtherWorkBook(LookupTable lookupTable, int cellnum) {
+    private static void writeInOtherWorkBook(LookupTable lookupTable, int cellnum)
+    {
         XSSFRow row = lookUpSheet.createRow(lookUprownum++);
         XSSFCell cell = row.createCell(cellnum);
         cell.setCellValue(lookupTable.getTableName());
         retrieveLookUpColumns(lookupTable.getColumns(), ++cellnum);
     }
 
-    
     /**
      * Write all column values in excel
      * @param columns
      * @param cellnum
      */
-    private static void retrieveLookUpColumns(DatabaseColumn[] columns, int cellnum) {
+    private static void retrieveLookUpColumns(DatabaseColumn[] columns, int cellnum)
+    {
         int tempCell = cellnum;
         for (DatabaseColumn tableColums : columns) {
             XSSFRow row = lookUpSheet.createRow(lookUprownum++);
@@ -149,7 +153,6 @@ public class ReadTablesFromOTMMAndWriteToExcel {
 
     }
 
-    
     /**
      * Read editable metadata tables and write in Excel
      * @param userName
@@ -157,7 +160,8 @@ public class ReadTablesFromOTMMAndWriteToExcel {
      * @throws BaseTeamsException
      */
     private static void readFromOTandWriteInExcel(String userName, String password)
-            throws BaseTeamsException {
+            throws BaseTeamsException
+    {
         SecuritySession session = null;
         try {
             session = AuthenticationServices.getInstance().login(userName, password);
@@ -172,13 +176,13 @@ public class ReadTablesFromOTMMAndWriteToExcel {
         }
     }
 
-    
     /**
-     * Persist values in Excel 
+     * Persist values in Excel
      * @param databaseTable
      * @param cellnum
      */
-    private static void writeInExcel(DatabaseTable databaseTable, int cellnum) {
+    private static void writeInExcel(DatabaseTable databaseTable, int cellnum)
+    {
         XSSFRow row = tablesSheet.createRow(tableRownum++);
         XSSFCell cell = row.createCell(cellnum);
         cell.setCellValue(databaseTable.getTableName());
@@ -192,7 +196,8 @@ public class ReadTablesFromOTMMAndWriteToExcel {
      * @param columns
      * @param cellnum
      */
-    private static void retrieveColumns(DatabaseColumn[] columns, int cellnum) {
+    private static void retrieveColumns(DatabaseColumn[] columns, int cellnum)
+    {
         int tempCell = cellnum;
         for (DatabaseColumn tableColums : columns) {
             XSSFRow row = tablesSheet.createRow(tableRownum++);

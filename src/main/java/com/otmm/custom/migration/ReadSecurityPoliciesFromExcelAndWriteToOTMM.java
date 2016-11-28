@@ -56,10 +56,6 @@ public class ReadSecurityPoliciesFromExcelAndWriteToOTMM {
 		session = AuthenticationServices.getInstance().login(userName, password);
 		for (Row row : securityPolicySheet) {
 
-			TeamsNumberIdentifier securityPolicyId = null;
-
-			TeamsUser[] admins = null;
-
 			int tableNum = 1;
 			row.setRowNum(tableNum++);
 			String policyName = row.getCell(0).getStringCellValue();
@@ -70,9 +66,11 @@ public class ReadSecurityPoliciesFromExcelAndWriteToOTMM {
 				if (securityPolicies.getName().equals(policyName)) {
 					System.out.println("Duplicate SecurityPolicy");
 				} else {
-
-					securityPolicyId = SecurityPolicyServices.getInstance().createSecurityPolicy(policyName, policyDesc,
-							admins, session);
+				    SecurityPolicy securityPolicy = new SecurityPolicy();
+				    securityPolicy.setName(policyName);
+				    securityPolicy.setDescription(policyDesc);
+				    
+					TeamsNumberIdentifier securityPolicyId = SecurityPolicyServices.getInstance().createSecurityPolicy(securityPolicy,session);
 
 				}
 			}
